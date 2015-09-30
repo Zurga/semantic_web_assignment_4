@@ -1,0 +1,106 @@
+@prefix : <http://www.supershopper.com/ontologies/supermarket.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.w3.org/2002/07/owl#> .
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+:isSoldBy rdf:type owl:ObjectProperty ,
+                   owl:TransitiveProperty ;
+          rdfs:domain :Product;
+          rdfs:range :Supermarket ;
+          owl:inverseOf :sells .
+
+:sells rdf:type owl:ObjectProperty ,
+                owl:TransitiveProperty ;
+                  rdfs:range :Product;
+                  rdfs:domain :Supermarket .
+
+:madeOf rdf:type owl:ObjectProperty , owl:TransitiveProperty .
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+:Supermarket rdf:type owl:Class ;
+             owl:disjointWith :Product;
+             owl:equivalentClass [ rdf:type owl:Restriction ;
+                                   owl:onProperty :sells ;
+                                   owl:hasValue :Product ] .
+
+:ProductCategory rdf:type owl:Class .
+
+:Product rdf:type owl:Class;
+         owl:equivalentClass [ rdf:type owl:Restriction ;
+                                owl:onProperty :isSoldBy ;
+                                owl:hasValue :Supermarket ] .
+
+:Price rdf:type owl:Class .
+
+:Meat rdf:type owl:Class ;
+      rdfs:subClassOf :ProductCategory ;
+      owl:equivalentClass [ rdf:type owl:Restriction ;
+                            owl:onProperty :madeOf ;
+                            owl:someValuesFrom :Animal ] .
+
+:Vegetable rdf:type owl:Class ;
+           rdfs:subClassOf :ProductCategory ;
+           owl:equivalentClass [ rdf:type owl:Restriction ;
+                                 owl:onProperty :madeOf;
+                                 owl:someValuesFrom :Plant ] .
+
+:Animal rdf:type owl:Class ;
+        owl:disjointWith :Product .
+
+:Plant rdf:type owl:Class;
+       owl:disjointWith :Product .
+
+:Lettuce rdf:type owl:Class ;
+         rdfs:subClassOf :Plant .
+
+:Cow rdf:type owl:Class ;
+     rdfs:subClassOf :Animal .
+
+:Chicken rdf:type owl:Class ;
+     rdfs:subClassOf :Animal .
+
+:Pig rdf:type owl:Class ;
+     rdfs:subClassOf :Animal .
+#################################################################
+#
+#    General axioms
+#
+#################################################################
+:super rdf:type owl:NamedIndividual .
+
+:cow rdf:type owl:NamedIndividual,
+                :Cow .
+
+:Veal rdf:type owl:NamedIndividual ;
+      :isSoldBy :super ;
+      :madeOf :cow .
+
+:GroudBeef rdf:type owl:NamedIndividual ;
+      :isSoldBy :super ;
+      :madeOf :cow .
+
+:lettuce rdf:type owl:NamedIndividual,
+                    :Lettuce .
+
+
+:IcebergLettuce rdf:type owl:NamedIndividual ;
+                 :isSoldBy :super ;
+                 :madeOf :lettuce .
+
+:Spinach rdf:type owl:NamedIndividual ;
+         :isSoldBy :super ;
+         :madeOf :Plant.
